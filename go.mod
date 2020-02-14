@@ -32,8 +32,8 @@ require (
 	github.com/miekg/dns v1.1.12 // indirect
 	github.com/multiformats/go-multiaddr v0.2.0
 	github.com/multiformats/go-multiaddr-dns v0.2.0
-	github.com/multiformats/go-multiaddr-net v0.1.1
-	github.com/multiformats/go-multistream v0.1.0
+	github.com/multiformats/go-multiaddr-net v0.1.2
+	github.com/multiformats/go-multistream v0.1.1
 	github.com/whyrusleeping/mdns v0.0.0-20190826153040-b9b60ed33aa9
 	golang.org/x/crypto v0.0.0-20200210191831-6ca56c2f2e2b // indirect
 	golang.org/x/tools v0.0.0-20200210192313-1ace956b0e17 // indirect

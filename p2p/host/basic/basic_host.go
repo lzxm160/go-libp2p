@@ -259,7 +259,7 @@ func (h *BasicHost) newStreamHandler(s network.Stream) {
 
 	if h.negtimeout > 0 {
 		if err := s.SetDeadline(time.Now().Add(h.negtimeout)); err != nil {
-			log.Error("setting stream deadline: ", err)
+			log.Debug("setting stream deadline: ", err)
 			s.Reset()
 			return
 		}
@@ -288,7 +288,7 @@ func (h *BasicHost) newStreamHandler(s network.Stream) {
 
 	if h.negtimeout > 0 {
 		if err := s.SetDeadline(time.Time{}); err != nil {
-			log.Error("resetting stream deadline: ", err)
+			log.Debugf("resetting stream deadline: ", err)
 			s.Reset()
 			return
 		}
@@ -751,20 +751,23 @@ func (h *BasicHost) AllAddrs() []ma.Multiaddr {
 				continue
 			}
 
+			extMaddr := mappedMaddr
+			if rest != nil {
+				extMaddr = ma.Join(extMaddr, rest)
+			}
+
+			// Add in the mapped addr.
+			finalAddrs = append(finalAddrs, extMaddr)
+
 			// Did the router give us a routable public addr?
 			if manet.IsPublicAddr(mappedMaddr) {
-				// Yes, use it.
-				extMaddr := mappedMaddr
-				if rest != nil {
-					extMaddr = ma.Join(extMaddr, rest)
-				}
-
-				// Add in the mapped addr.
-				finalAddrs = append(finalAddrs, extMaddr)
+				//well done
 				continue
 			}
 
-			// No. Ok, let's try our observed addresses.
+			// No.
+			// in case router give us a wrong address.
+			// also add observed addresses
 
 			// Now, check if we have any observed addresses that
 			// differ from the one reported by the router. Routers
@@ -795,6 +798,7 @@ func (h *BasicHost) AllAddrs() []ma.Multiaddr {
 		}
 		finalAddrs = append(finalAddrs, observedAddrs...)
 	}
+
 	return dedupAddrs(finalAddrs)
 }
 
