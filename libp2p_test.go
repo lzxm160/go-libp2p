@@ -21,6 +21,15 @@ func TestNewHost(t *testing.T) {
 	h.Close()
 }
 
+func TestAddress(t *testing.T) {
+	opts := []Option{
+		ListenAddrStrings("/ip4/0.0.0.0/tcp/0"),
+	}
+
+	host, err := New(context.Background(), opts...)
+	fmt.Println(host.Addrs(),":",err)
+}
+
 func TestBadTransportConstructor(t *testing.T) {
 	ctx := context.Background()
 	h, err := New(ctx, Transport(func() {}))
